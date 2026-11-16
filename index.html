@@ -51,6 +51,13 @@ h1{font-size:1.6rem;line-height:1.2;margin:0 0 8px;font-weight:800;letter-spacin
 .btn.fill:hover{background:var(--p-dark);border-color:var(--p-dark)}
 .btn:active,.opt:active{transform:scale(.98)}
 .btn:focus-visible,.opt:focus-visible{outline:3px solid #b79cf2;outline-offset:2px}
+.lock{text-align:center}.lock form{text-align:left}
+.lbl{display:block;font-size:.88rem;font-weight:700;margin-bottom:6px}
+.pwrow{display:flex;border:2px solid var(--p-line);border-radius:14px;background:var(--white);overflow:hidden}
+.pwrow:focus-within{border-color:var(--p);box-shadow:0 0 0 3px #e4d9f8}
+.pwrow input{flex:1;min-width:0;min-height:50px;border:0;outline:0;padding:0 14px;font:inherit;font-size:1rem;color:var(--ink);background:transparent}
+.tg{border:0;background:transparent;color:var(--p);font:inherit;font-weight:700;font-size:.88rem;padding:0 16px;cursor:pointer}
+.err{min-height:1.4em;margin:10px 0 12px;color:#b42318;font-size:.9rem;font-weight:600}
 footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -68,10 +75,31 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
 <script>
 (function(){
   var clean=function(a){return a.map(function(n){return n.replace(/\s+/g," ").trim();});};
-  var LISTAS={
-    plus:clean(["MURILO ACIOLI","VALDIRENE","AUREA MARTINS","MÁRCIA FERREIRA","MARCIA NASCIMENTO","GORETE","VERA SANTOS","ADRIANA NASCIMENTO","ANE CAROLINE","DOREIDES ARAUJO","ELIANA RIZYA","ADRIANA MATIAS","PATRICIA BARROS","VERIDIANA","CARLOS HUMBERTO","GABRIELLA  LEITE","LEANDRA","JOSILENE ACIOLI","ISABELE JUSTINO","LAURA WANDERLEY","LIVIA KELLY","LUCAS GABRIEL","LUIZ FAGUNDES","LYVIA GRAZIELLI","MAYSA DORIS","FABIA BEZERRA","SANDRA PINHEIRO","SAYONARA","MIRELLE CHAVES","BRUNO OTTE","HADOVALDO ARAUJO","GILBERTO FRANKLIN","AURORA GALINDO","SANDRO MORETI","MARIA RITA","JANAINA SOUZA","JOSEANE MARTINS","NATALIA","BEATRIZ ARAUJO"]),
-    notplus:clean(["ANA PAULA PORTO","CLEONIDES MARIA","JANIELE PEREIRA","MARIA SELMA","VITORIA REGIA","AMARO SOARES","ANA PATRICIA","ANTONIO CLAUDEONOR","ELINALDO","HELENA RODRIGUES","JOSENAIDE","QUITERIA MARIA","SANDRA DE FREITAS","ADRIANA LACERDA","ANTONIA ACIOLI","LUIZ ALVES","MARIA IVONE","JULYA ESTEVAO","SANDRA ESTEVAO","WILLIAN BRUNO","CLEONICE MARIA","ITALO CAVALCANTE","JOÃO  ALBERT","LETICYA BEATRIZ","LUCIANA  SANTOS","ROSIMEIRE CAVALCANTE","WILLYAN KAYRON","ZENILDA ARAUJO","FABIOLA PEREIRA","KEZIA DE SOUZA","MARCILENE","NUCAS PEREIRA","RAQUEL NUNES","SANDRA  BULANDEIRA","ANDREA TEIXEIRA","DEBORA OTTE","CAROL OTTE","DEILTA ARAUJO","GEORGINA OTTE","MARIA DE LOURDES","MARILENE OTTE","PAULO RODOLFO","PAULO TEIXEIRA","QUITERIA PEDRO","SANDRA MARA","VERA LOURENÇO","VICTOR ALEXANDRE"])
-  };
+  var BLOB="3A8BWAqatVVvXxHsTzsyhq+Db+1KoyGsdKM4aYzDY5dPlteNtP/k5Tl+1erhQYm3S8dtpNfcYiM10LoEgYXiu/xo4vxkcXxp17FG55RjbALtGRz+YhlvAv75UTqpl+GEdZYCDI70u1rIepeIr8d4x2eOj8Izk3q7W90gH+p+uOLCM6pO07YaCIYt1eWrN9juUWLmiFrFMNUZyIN3bTMDf02j+Z39wv6BejSQoGyCinLi7ketEa/qe2fSdeHvfSvYNOocLq04VxmTbDVtcVMlpXH9nXxRjjRoahtRysP2owmnPt5mLMsfTQxsgPbkslXXjWQwLnzF3kUEah17hT84zQnu1C+i3g0iYNhFduwpMO11HxOecCK5bOQWuRvDvnZ/ymuM7B7d2jgVS4wogHpfrocTVxz+ZfMYkKjb+kGBvoJ983hbqHL0K/d0ocYh4WSqeJY+V9gCE93YrCQEc0Lpt7o4dYraEzngajY4Piky8i+wAXY30+DBStNiBuyXZ/NxcayVeF0cb5Cj1c1sBtQ9VbTe2K+C8Du94KZaUFIDD2pkKBpC8o1ai5DehiM3CbjhYLfRvMTaFzcUu/kalvzVsiZQNFArRZp3qpeXEopmZ7jBMXQpFq7laimcA17C4WpeG7vllHecRB+vIXFlC7PvIaA4BPo67uaaKaFdD4gokFkAkMfaPUQ6TaoE7nlQ3ONYi/Y1aLWFvIJ8S9LHQbM7G2+dyqJwoBGoxyC3W2bVHqcpJQqq3S/euCDoJooC6hOqYp9SHcb5j8oTakD34Y9ZchbQCt2bK55G5b3ne1gtO/kvezv8p1usvvU5oFrj7rh/4qOERobgFDqI/HTfi3j9c2DTVWl7FqiZi/eToMRnDCLl5jDllwTjuA/kHVYGQ949Obwz4LE4l22wSm2rLl+jOYPaHs30UGZ/WYHRUj8grg0JlTyjG2Fmng+6HJNg27xwG7BSQjuZu+/Pd9d6HUH5lEV93MPrlblzx398vFdQcOajF/MbjQN3fv2v+UtONC0vOiIiC/SqEyVftjxtvGTTN5PUGGbSvYnfWCX5NA++RtGNJixRR2EvypKbIFdlFDwRQSlv3Ra+lqAl6tQc9Fac3uAxWlwUmNGpGAvUh+kra56KtuHv7gjVJ/1FHU5GslDlNVmlSU3/jSyU3pZVaRP8PPDuJ54bKL7d7chfhw/eeOqHsiE53RWxEvsDbGpycqkGkFDbwfEdijOMzZl1x2Rmdb5W+SS/F4ttad7hLLnMxJgtKLMGhUdcgLwuNAYdVEMkEPUBA+ZnEp0WNwDHslohdTb3KueqhzGwXjcVtmTQBbQ3yA9ONc974DX9KGgjKHdpAKVmUObl9iN+Q+Fa0EUAq5YwFoSnv5kwqBDNFKNqDRP12VN9tWjVRoQPLhEHyMcwwnIFctn4ZHsscJfIj9923EJ1U9ngjB+2wcPOUpqk0tCSy8nc09ZAgPWn2Y4GAtHapt74nGkyJ9L0ZbBG9wGgGCSzy62UhDj8IxDWnBCXt1ha2EoSMFUHdqaPn7qVXhJQYHw3WgG8MYEU4ymi2uzVaOukS3+HbUWrKECV2C8nSKyLsGQGQVP7pvjJwV5lieylSv5jBZFozjEFKVG9gguLmZqyLkoy4oBZ5QySx6E048n1DNq9NMIK46hip8PRHn0hLjFeCE61cGwsGdHh5tXcd3wHweAD6DobbbqqcytbwAGu0N3Hyqh1yW1xa8bFzvye3vrejFuEc+OVekv0zrWKf2DNwRCrF69pFgbA2wUVXKqqtjjR0RBQ7Aqk5xrrTZkvNKfbSnGAOJVkJZyCwUTHK6J8DFEhKqnbV8XmTF/r53YY5nfsWjqmmHtcMJgaSKrVttshk8u22PjWkJMr9SsWtvkDROO394qmZhr4TpGnVEoBgswEDTm6PTcOsNdCZU8ZrG6ugv5VVUi+R0Aq/Gi5SwFfrn7UseDxsg==";
+  var LISTAS=null;
+  async function abrir(pw){
+    var raw=Uint8Array.from(atob(BLOB),function(ch){return ch.charCodeAt(0);});
+    var km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+    var k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:raw.slice(0,16),iterations:200000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+    var buf=await crypto.subtle.decrypt({name:"AES-GCM",iv:raw.slice(16,28)},k,raw.slice(28));
+    return JSON.parse(new TextDecoder().decode(buf));
+  }
+  function login(){
+    stepsEl.innerHTML="";
+    app.innerHTML='<div class="lock pop"><div class="av" aria-hidden="true"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div><h1>Acesso restrito</h1><p class="sub">Digite a senha para entrar no sorteador.</p><form id="lf" novalidate><label for="pw" class="lbl">Senha</label><div class="pwrow"><input id="pw" type="password" autocomplete="current-password" required><button type="button" class="tg" id="tg" aria-label="Mostrar senha">Mostrar</button></div><p class="err" id="err" role="alert"></p><button class="btn fill" type="submit" id="go" style="width:100%">Entrar</button></form></div>';
+    var f=document.getElementById("lf"),pw=document.getElementById("pw"),err=document.getElementById("err"),go=document.getElementById("go"),tg=document.getElementById("tg");
+    pw.focus();
+    tg.addEventListener("click",function(){var v=pw.type==="password";pw.type=v?"text":"password";tg.textContent=v?"Ocultar":"Mostrar";tg.setAttribute("aria-label",v?"Ocultar senha":"Mostrar senha");});
+    f.addEventListener("submit",function(ev){
+      ev.preventDefault();
+      if(!pw.value){err.textContent="Digite a senha.";pw.focus();return;}
+      if(!window.crypto||!crypto.subtle){err.textContent="Abra o site por uma conexão segura (HTTPS).";return;}
+      err.textContent="";go.disabled=true;go.textContent="Verificando…";
+      abrir(pw.value).then(function(l){LISTAS=l;inicio();}).catch(function(){
+        err.textContent="Senha incorreta. Tente novamente.";pw.value="";pw.focus();go.disabled=false;go.textContent="Entrar";
+      });
+    });
+  }
   var NOMES={plus:"Irmão plus",notplus:"Irmão not plus"};
   var app=document.getElementById("app"),stepsEl=document.getElementById("steps");
   var lista=null,tipo="",atual="";
@@ -114,7 +142,7 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
     else if(a==="final"){final();}
     else if(a==="inicio"){inicio();}
   });
-  inicio();
+  login();
 })();
 </script>
 </body>
