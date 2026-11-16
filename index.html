@@ -3,80 +3,116 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6d28d9">
 <title>Sorteador de irmãos</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
-:root{--bg:#eef1f6;--card:#fff;--ink:#1d2433;--mute:#5d6678;--accent:#3b4cca;--accent-ink:#fff;--line:#d6dbe6;
+:root{--p:#6d28d9;--p-dark:#4c1d95;--p-soft:#f5f0ff;--p-line:#e4d9f8;--ink:#1f1536;--mute:#6b6283;--bg:#faf8ff;--white:#fff;color-scheme:light;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141826;--card:#1d2336;--ink:#eceff7;--mute:#98a1b8;--accent:#8c9bff;--accent-ink:#141826;--line:#2f3752;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#141826;--card:#1d2336;--ink:#eceff7;--mute:#98a1b8;--accent:#8c9bff;--accent-ink:#141826;--line:#2f3752;color-scheme:dark}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
-main{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 24px}
-h1{font-size:1.5rem;font-weight:800;margin:0 0 6px}
-p{margin:0 0 20px;color:var(--mute);line-height:1.5}
-.nome{font-size:clamp(1.9rem,9vw,2.6rem);font-weight:800;line-height:1.1;margin:8px 0 24px;overflow-wrap:anywhere}
-.q{font-weight:600;color:var(--ink);margin-bottom:16px}
-.row{display:flex;flex-direction:column;gap:10px}
-button{font:inherit;font-weight:600;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-button.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-button:active{transform:scale(.98)}
-.tag{display:inline-block;font-size:.85rem;color:var(--mute);margin-bottom:4px}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+header{background:var(--white);border-bottom:1px solid var(--p-line)}
+.bar{max-width:560px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.logo{width:40px;height:40px;border-radius:12px;background:var(--p);display:grid;place-items:center;flex:none}
+.bar b{font-size:1.05rem;font-weight:800;letter-spacing:-.01em}
+.bar span{display:block;font-size:.8rem;color:var(--mute);font-weight:500}
+main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:28px 20px 40px}
+.steps{display:flex;align-items:center;gap:8px;margin-bottom:22px}
+.st{display:flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--mute)}
+.st i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:.8rem;background:var(--white);border:2px solid var(--p-line);color:var(--mute)}
+.st.on{color:var(--p-dark)}
+.st.on i{background:var(--p);border-color:var(--p);color:#fff}
+.st.done i{background:var(--p-soft);border-color:var(--p);color:var(--p)}
+.ln{flex:1;height:2px;background:var(--p-line);border-radius:2px}
+.card{background:var(--white);border:1px solid var(--p-line);border-radius:20px;padding:28px 22px;box-shadow:0 10px 30px -12px rgba(76,29,149,.25)}
+h1{font-size:1.6rem;line-height:1.2;margin:0 0 8px;font-weight:800;letter-spacing:-.02em;color:var(--ink)}
+.sub{margin:0 0 22px;color:var(--mute);line-height:1.55}
+.opts{display:grid;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;width:100%;min-height:72px;padding:16px;border-radius:16px;border:2px solid var(--p-line);background:var(--white);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--p);background:var(--p-soft)}
+.opt strong{display:block;font-size:1.02rem}
+.opt small{color:var(--mute);font-size:.86rem}
+.opt .ic{width:44px;height:44px;border-radius:12px;background:var(--p-soft);color:var(--p);display:grid;place-items:center;font-weight:800;flex:none}
+.opt .ar{margin-left:auto;color:var(--p)}
+.res{text-align:center;padding:6px 0 4px}
+.av{width:84px;height:84px;margin:0 auto 16px;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,var(--p-dark));color:#fff;display:grid;place-items:center;font-size:1.9rem;font-weight:800;letter-spacing:.02em}
+.lab{font-size:.88rem;color:var(--mute);font-weight:600;margin-bottom:6px}
+.nome{font-size:clamp(1.7rem,8vw,2.2rem);font-weight:800;line-height:1.15;letter-spacing:-.02em;overflow-wrap:anywhere;margin:0 0 6px}
+.badge{display:inline-block;margin-top:8px;padding:5px 12px;border-radius:999px;background:var(--p-soft);color:var(--p-dark);font-size:.8rem;font-weight:700}
+.pop{animation:pop .35s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.q{margin:26px 0 14px;padding-top:22px;border-top:1px solid var(--p-line);font-weight:700;text-align:center}
+.row{display:grid;gap:10px}
+@media(min-width:420px){.row.two{grid-template-columns:1fr 1fr}}
+.btn{font:inherit;font-weight:700;min-height:50px;padding:12px 18px;border-radius:14px;border:2px solid var(--p);background:var(--white);color:var(--p);cursor:pointer;transition:background .15s,transform .1s}
+.btn:hover{background:var(--p-soft)}
+.btn.fill{background:var(--p);color:#fff}
+.btn.fill:hover{background:var(--p-dark);border-color:var(--p-dark)}
+.btn:active,.opt:active{transform:scale(.98)}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid #b79cf2;outline-offset:2px}
+footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main id="app"></main>
+<header><div class="bar">
+  <div class="logo" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1" fill="#fff"/><circle cx="15.5" cy="15.5" r="1" fill="#fff"/><circle cx="12" cy="12" r="1" fill="#fff"/></svg></div>
+  <div><b>Sorteador de irmãos</b><span>Escolha rápida e justa</span></div>
+</div></header>
+<main>
+  <nav class="steps" id="steps" aria-label="Progresso"></nav>
+  <section class="card" id="app" aria-live="polite"></section>
+</main>
+<footer>Sorteio aleatório feito no seu navegador</footer>
 <script>
 (function(){
-  var clean = function(a){ return a.map(function(n){ return n.replace(/\s+/g," ").trim(); }); };
-  var LISTAS = {
-    plus: clean(["MURILO ACIOLI","VALDIRENE","AUREA MARTINS","MÁRCIA FERREIRA","MARCIA NASCIMENTO","GORETE","VERA SANTOS","ADRIANA NASCIMENTO","ANE CAROLINE","DOREIDES ARAUJO","ELIANA RIZYA","ADRIANA MATIAS","PATRICIA BARROS","VERIDIANA","CARLOS HUMBERTO","GABRIELLA  LEITE","LEANDRA","JOSILENE ACIOLI","ISABELE JUSTINO","LAURA WANDERLEY","LIVIA KELLY","LUCAS GABRIEL","LUIZ FAGUNDES","LYVIA GRAZIELLI","MAYSA DORIS","FABIA BEZERRA","SANDRA PINHEIRO","SAYONARA","MIRELLE CHAVES","BRUNO OTTE","HADOVALDO ARAUJO","GILBERTO FRANKLIN","AURORA GALINDO","SANDRO MORETI","MARIA RITA","JANAINA SOUZA","JOSEANE MARTINS","NATALIA","BEATRIZ ARAUJO"]),
-    notplus: clean(["ANA PAULA PORTO","CLEONIDES MARIA","JANIELE PEREIRA","MARIA SELMA","VITORIA REGIA","AMARO SOARES","ANA PATRICIA","ANTONIO CLAUDEONOR","ELINALDO","HELENA RODRIGUES","JOSENAIDE","QUITERIA MARIA","SANDRA DE FREITAS","ADRIANA LACERDA","ANTONIA ACIOLI","LUIZ ALVES","MARIA IVONE","JULYA ESTEVAO","SANDRA ESTEVAO","WILLIAN BRUNO","CLEONICE MARIA","ITALO CAVALCANTE","JOÃO  ALBERT","LETICYA BEATRIZ","LUCIANA  SANTOS","ROSIMEIRE CAVALCANTE","WILLYAN KAYRON","ZENILDA ARAUJO","FABIOLA PEREIRA","KEZIA DE SOUZA","MARCILENE","NUCAS PEREIRA","RAQUEL NUNES","SANDRA  BULANDEIRA","ANDREA TEIXEIRA","DEBORA OTTE","CAROL OTTE","DEILTA ARAUJO","GEORGINA OTTE","MARIA DE LOURDES","MARILENE OTTE","PAULO RODOLFO","PAULO TEIXEIRA","QUITERIA PEDRO","SANDRA MARA","VERA LOURENÇO","VICTOR ALEXANDRE"])
+  var clean=function(a){return a.map(function(n){return n.replace(/\s+/g," ").trim();});};
+  var LISTAS={
+    plus:clean(["MURILO ACIOLI","VALDIRENE","AUREA MARTINS","MÁRCIA FERREIRA","MARCIA NASCIMENTO","GORETE","VERA SANTOS","ADRIANA NASCIMENTO","ANE CAROLINE","DOREIDES ARAUJO","ELIANA RIZYA","ADRIANA MATIAS","PATRICIA BARROS","VERIDIANA","CARLOS HUMBERTO","GABRIELLA  LEITE","LEANDRA","JOSILENE ACIOLI","ISABELE JUSTINO","LAURA WANDERLEY","LIVIA KELLY","LUCAS GABRIEL","LUIZ FAGUNDES","LYVIA GRAZIELLI","MAYSA DORIS","FABIA BEZERRA","SANDRA PINHEIRO","SAYONARA","MIRELLE CHAVES","BRUNO OTTE","HADOVALDO ARAUJO","GILBERTO FRANKLIN","AURORA GALINDO","SANDRO MORETI","MARIA RITA","JANAINA SOUZA","JOSEANE MARTINS","NATALIA","BEATRIZ ARAUJO"]),
+    notplus:clean(["ANA PAULA PORTO","CLEONIDES MARIA","JANIELE PEREIRA","MARIA SELMA","VITORIA REGIA","AMARO SOARES","ANA PATRICIA","ANTONIO CLAUDEONOR","ELINALDO","HELENA RODRIGUES","JOSENAIDE","QUITERIA MARIA","SANDRA DE FREITAS","ADRIANA LACERDA","ANTONIA ACIOLI","LUIZ ALVES","MARIA IVONE","JULYA ESTEVAO","SANDRA ESTEVAO","WILLIAN BRUNO","CLEONICE MARIA","ITALO CAVALCANTE","JOÃO  ALBERT","LETICYA BEATRIZ","LUCIANA  SANTOS","ROSIMEIRE CAVALCANTE","WILLYAN KAYRON","ZENILDA ARAUJO","FABIOLA PEREIRA","KEZIA DE SOUZA","MARCILENE","NUCAS PEREIRA","RAQUEL NUNES","SANDRA  BULANDEIRA","ANDREA TEIXEIRA","DEBORA OTTE","CAROL OTTE","DEILTA ARAUJO","GEORGINA OTTE","MARIA DE LOURDES","MARILENE OTTE","PAULO RODOLFO","PAULO TEIXEIRA","QUITERIA PEDRO","SANDRA MARA","VERA LOURENÇO","VICTOR ALEXANDRE"])
   };
-  var app = document.getElementById("app");
-  var lista = null, tipo = "", atual = "";
+  var NOMES={plus:"Irmão plus",notplus:"Irmão not plus"};
+  var app=document.getElementById("app"),stepsEl=document.getElementById("steps");
+  var lista=null,tipo="",atual="";
 
-  function sortear(){
-    var novo;
-    do { novo = lista[Math.floor(Math.random()*lista.length)]; }
-    while (novo === atual && lista.length > 1);
-    atual = novo;
+  function sortear(){var n;do{n=lista[Math.floor(Math.random()*lista.length)];}while(n===atual&&lista.length>1);atual=n;}
+  function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+  function ini(s){var p=s.split(" ");return (p[0][0]+(p[1]?p[1][0]:"")).toUpperCase();}
+  function steps(n){
+    var l=["Grupo","Sorteio","Resultado"],h="";
+    l.forEach(function(t,i){
+      var c=i+1===n?"on":(i+1<n?"done":"");
+      h+='<div class="st '+c+'"'+(i+1===n?' aria-current="step"':'')+'><i>'+(i+1<n?"✓":i+1)+'</i>'+t+'</div>'+(i<2?'<div class="ln"></div>':'');
+    });
+    stepsEl.innerHTML=h;
   }
-  function esc(s){ return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
-  function view(html){ app.innerHTML = html; var b = app.querySelector("button"); if(b) b.focus(); }
-
+  function view(html,n){steps(n);app.innerHTML=html;var b=app.querySelector("button");if(b)b.focus({preventScroll:true});}
+  function pessoa(){
+    return '<div class="res pop"><div class="av" aria-hidden="true">'+esc(ini(atual))+'</div><div class="lab">Irmão(a) escolhido</div><p class="nome">'+esc(atual)+'</p><span class="badge">'+NOMES[tipo]+'</span></div>';
+  }
   function inicio(){
-    view('<h1>Sorteador de irmãos</h1><p>Qual irmão(a) deseja sortear?</p>'+
-      '<div class="row"><button class="main" data-a="escolher" data-t="plus">Irmão plus</button>'+
-      '<button data-a="escolher" data-t="notplus">Irmão not plus</button></div>');
+    view('<h1>Quem você quer sortear?</h1><p class="sub">Escolha o grupo para sortear um nome aleatório.</p>'+
+      '<div class="opts"><button class="opt" data-a="escolher" data-t="plus"><span class="ic">+</span><span><strong>Irmão plus</strong><small>'+LISTAS.plus.length+' nomes</small></span><span class="ar">›</span></button>'+
+      '<button class="opt" data-a="escolher" data-t="notplus"><span class="ic">○</span><span><strong>Irmão not plus</strong><small>'+LISTAS.notplus.length+' nomes</small></span><span class="ar">›</span></button></div>',1);
   }
   function mostrar(){
-    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
-      '<p class="q">Deseja mudar de irmão(a)?</p>'+
-      '<div class="row"><button data-a="outro">Sim, sortear outro</button>'+
-      '<button class="main" data-a="manter">Não, manter este</button></div>');
+    view(pessoa()+'<p class="q">Deseja mudar de irmão(a)?</p><div class="row two"><button class="btn" data-a="outro">Sim, sortear outro</button><button class="btn fill" data-a="manter">Não, manter este</button></div>',2);
   }
   function recente(){
-    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
-      '<p class="q">Esse irmão fez parte recentemente?</p>'+
-      '<div class="row"><button data-a="outro">Sim, sortear outro</button>'+
-      '<button class="main" data-a="final">Não</button></div>');
+    view(pessoa()+'<p class="q">Esse irmão fez parte recentemente?</p><div class="row two"><button class="btn" data-a="outro">Sim, sortear outro</button><button class="btn fill" data-a="final">Não</button></div>',2);
   }
   function final(){
-    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
-      '<div class="row"><button class="main" data-a="inicio">Novo sorteio</button></div>');
+    view(pessoa()+'<div class="row" style="margin-top:26px"><button class="btn fill" data-a="inicio">Novo sorteio</button></div>',3);
   }
-
-  app.addEventListener("click", function(e){
-    var b = e.target.closest("button"); if(!b) return;
-    var a = b.getAttribute("data-a");
-    if (a === "escolher"){ tipo = b.getAttribute("data-t"); lista = LISTAS[tipo]; atual = ""; sortear(); mostrar(); }
-    else if (a === "outro"){ sortear(); mostrar(); }
-    else if (a === "manter"){ recente(); }
-    else if (a === "final"){ final(); }
-    else if (a === "inicio"){ inicio(); }
+  app.addEventListener("click",function(e){
+    var b=e.target.closest("button");if(!b)return;
+    var a=b.getAttribute("data-a");
+    if(a==="escolher"){tipo=b.getAttribute("data-t");lista=LISTAS[tipo];atual="";sortear();mostrar();}
+    else if(a==="outro"){sortear();mostrar();}
+    else if(a==="manter"){recente();}
+    else if(a==="final"){final();}
+    else if(a==="inicio"){inicio();}
   });
   inicio();
 })();
