@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sorteador de irmãos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#eef1f6;--card:#fff;--ink:#1d2433;--mute:#5d6678;--accent:#3b4cca;--accent-ink:#fff;--line:#d6dbe6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141826;--card:#1d2336;--ink:#eceff7;--mute:#98a1b8;--accent:#8c9bff;--accent-ink:#141826;--line:#2f3752;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141826;--card:#1d2336;--ink:#eceff7;--mute:#98a1b8;--accent:#8c9bff;--accent-ink:#141826;--line:#2f3752;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px 24px}
+h1{font-size:1.5rem;font-weight:800;margin:0 0 6px}
+p{margin:0 0 20px;color:var(--mute);line-height:1.5}
+.nome{font-size:clamp(1.9rem,9vw,2.6rem);font-weight:800;line-height:1.1;margin:8px 0 24px;overflow-wrap:anywhere}
+.q{font-weight:600;color:var(--ink);margin-bottom:16px}
+.row{display:flex;flex-direction:column;gap:10px}
+button{font:inherit;font-weight:600;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+button.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button:active{transform:scale(.98)}
+.tag{display:inline-block;font-size:.85rem;color:var(--mute);margin-bottom:4px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+(function(){
+  var clean = function(a){ return a.map(function(n){ return n.replace(/\s+/g," ").trim(); }); };
+  var LISTAS = {
+    plus: clean(["MURILO ACIOLI","VALDIRENE","AUREA MARTINS","MÁRCIA FERREIRA","MARCIA NASCIMENTO","GORETE","VERA SANTOS","ADRIANA NASCIMENTO","ANE CAROLINE","DOREIDES ARAUJO","ELIANA RIZYA","ADRIANA MATIAS","PATRICIA BARROS","VERIDIANA","CARLOS HUMBERTO","GABRIELLA  LEITE","LEANDRA","JOSILENE ACIOLI","ISABELE JUSTINO","LAURA WANDERLEY","LIVIA KELLY","LUCAS GABRIEL","LUIZ FAGUNDES","LYVIA GRAZIELLI","MAYSA DORIS","FABIA BEZERRA","SANDRA PINHEIRO","SAYONARA","MIRELLE CHAVES","BRUNO OTTE","HADOVALDO ARAUJO","GILBERTO FRANKLIN","AURORA GALINDO","SANDRO MORETI","MARIA RITA","JANAINA SOUZA","JOSEANE MARTINS","NATALIA","BEATRIZ ARAUJO"]),
+    notplus: clean(["ANA PAULA PORTO","CLEONIDES MARIA","JANIELE PEREIRA","MARIA SELMA","VITORIA REGIA","AMARO SOARES","ANA PATRICIA","ANTONIO CLAUDEONOR","ELINALDO","HELENA RODRIGUES","JOSENAIDE","QUITERIA MARIA","SANDRA DE FREITAS","ADRIANA LACERDA","ANTONIA ACIOLI","LUIZ ALVES","MARIA IVONE","JULYA ESTEVAO","SANDRA ESTEVAO","WILLIAN BRUNO","CLEONICE MARIA","ITALO CAVALCANTE","JOÃO  ALBERT","LETICYA BEATRIZ","LUCIANA  SANTOS","ROSIMEIRE CAVALCANTE","WILLYAN KAYRON","ZENILDA ARAUJO","FABIOLA PEREIRA","KEZIA DE SOUZA","MARCILENE","NUCAS PEREIRA","RAQUEL NUNES","SANDRA  BULANDEIRA","ANDREA TEIXEIRA","DEBORA OTTE","CAROL OTTE","DEILTA ARAUJO","GEORGINA OTTE","MARIA DE LOURDES","MARILENE OTTE","PAULO RODOLFO","PAULO TEIXEIRA","QUITERIA PEDRO","SANDRA MARA","VERA LOURENÇO","VICTOR ALEXANDRE"])
+  };
+  var app = document.getElementById("app");
+  var lista = null, tipo = "", atual = "";
+
+  function sortear(){
+    var novo;
+    do { novo = lista[Math.floor(Math.random()*lista.length)]; }
+    while (novo === atual && lista.length > 1);
+    atual = novo;
+  }
+  function esc(s){ return s.replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
+  function view(html){ app.innerHTML = html; var b = app.querySelector("button"); if(b) b.focus(); }
+
+  function inicio(){
+    view('<h1>Sorteador de irmãos</h1><p>Qual irmão(a) deseja sortear?</p>'+
+      '<div class="row"><button class="main" data-a="escolher" data-t="plus">Irmão plus</button>'+
+      '<button data-a="escolher" data-t="notplus">Irmão not plus</button></div>');
+  }
+  function mostrar(){
+    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
+      '<p class="q">Deseja mudar de irmão(a)?</p>'+
+      '<div class="row"><button data-a="outro">Sim, sortear outro</button>'+
+      '<button class="main" data-a="manter">Não, manter este</button></div>');
+  }
+  function recente(){
+    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
+      '<p class="q">Esse irmão fez parte recentemente?</p>'+
+      '<div class="row"><button data-a="outro">Sim, sortear outro</button>'+
+      '<button class="main" data-a="final">Não</button></div>');
+  }
+  function final(){
+    view('<span class="tag">Irmão(a) escolhido</span><div class="nome">'+esc(atual)+'</div>'+
+      '<div class="row"><button class="main" data-a="inicio">Novo sorteio</button></div>');
+  }
+
+  app.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    var a = b.getAttribute("data-a");
+    if (a === "escolher"){ tipo = b.getAttribute("data-t"); lista = LISTAS[tipo]; atual = ""; sortear(); mostrar(); }
+    else if (a === "outro"){ sortear(); mostrar(); }
+    else if (a === "manter"){ recente(); }
+    else if (a === "final"){ final(); }
+    else if (a === "inicio"){ inicio(); }
+  });
+  inicio();
+})();
+</script>
+</body>
+</html>
