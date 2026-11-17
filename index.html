@@ -102,9 +102,11 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
   }
   var NOMES={plus:"Irmão plus",notplus:"Irmão not plus"};
   var app=document.getElementById("app"),stepsEl=document.getElementById("steps");
-  var lista=null,tipo="",atual="";
+  var lista=null,tipo="",atual="",descartados={plus:[],notplus:[]};
 
-  function sortear(){var n;do{n=lista[Math.floor(Math.random()*lista.length)];}while(n===atual&&lista.length>1);atual=n;}
+  function sortear(){var r=lista.filter(function(n){return descartados[tipo].indexOf(n)<0;});if(!r.length){atual="";return false;}atual=r[Math.floor(Math.random()*r.length)];return true;}
+  function descartar(){if(atual&&descartados[tipo].indexOf(atual)<0)descartados[tipo].push(atual);}
+  function esgotado(){view('<div class="res pop"><div class="av" aria-hidden="true">!</div><h1>Nomes esgotados</h1><p class="sub">Todos os nomes deste grupo já foram descartados.</p></div><div class="row"><button class="btn fill" data-a="restaurar">Restaurar nomes e sortear</button><button class="btn" data-a="inicio">Voltar ao início</button></div>',2);}
   function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
   function ini(s){var p=s.split(" ");return (p[0][0]+(p[1]?p[1][0]:"")).toUpperCase();}
   function steps(n){
@@ -121,8 +123,8 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
   }
   function inicio(){
     view('<h1>Quem você quer sortear?</h1><p class="sub">Escolha o grupo para sortear um nome aleatório.</p>'+
-      '<div class="opts"><button class="opt" data-a="escolher" data-t="plus"><span class="ic">+</span><span><strong>Irmão plus</strong><small>'+LISTAS.plus.length+' nomes</small></span><span class="ar">›</span></button>'+
-      '<button class="opt" data-a="escolher" data-t="notplus"><span class="ic">○</span><span><strong>Irmão not plus</strong><small>'+LISTAS.notplus.length+' nomes</small></span><span class="ar">›</span></button></div>',1);
+      '<div class="opts"><button class="opt" data-a="escolher" data-t="plus"><span class="ic">+</span><span><strong>Irmão plus</strong><small>'+(LISTAS.plus.length-descartados.plus.length)+' nomes disponíveis</small></span><span class="ar">›</span></button>'+
+      '<button class="opt" data-a="escolher" data-t="notplus"><span class="ic">○</span><span><strong>Irmão not plus</strong><small>'+(LISTAS.notplus.length-descartados.notplus.length)+' nomes disponíveis</small></span><span class="ar">›</span></button></div>'+(descartados.plus.length+descartados.notplus.length?'<div class="row" style="margin-top:14px"><button class="btn" data-a="limpar">Restaurar nomes descartados ('+(descartados.plus.length+descartados.notplus.length)+')</button></div>':''),1);
   }
   function mostrar(){
     view(pessoa()+'<p class="q">Deseja mudar de irmão(a)?</p><div class="row two"><button class="btn" data-a="outro">Sim, sortear outro</button><button class="btn fill" data-a="manter">Não, manter este</button></div>',2);
@@ -136,8 +138,10 @@ footer{text-align:center;color:var(--mute);font-size:.8rem;padding:0 20px 24px}
   app.addEventListener("click",function(e){
     var b=e.target.closest("button");if(!b)return;
     var a=b.getAttribute("data-a");
-    if(a==="escolher"){tipo=b.getAttribute("data-t");lista=LISTAS[tipo];atual="";sortear();mostrar();}
-    else if(a==="outro"){sortear();mostrar();}
+    if(a==="escolher"){tipo=b.getAttribute("data-t");lista=LISTAS[tipo];atual="";if(sortear())mostrar();else esgotado();}
+    else if(a==="outro"){descartar();if(sortear())mostrar();else esgotado();}
+    else if(a==="restaurar"){descartados[tipo]=[];sortear();mostrar();}
+    else if(a==="limpar"){descartados={plus:[],notplus:[]};inicio();}
     else if(a==="manter"){recente();}
     else if(a==="final"){final();}
     else if(a==="inicio"){inicio();}
